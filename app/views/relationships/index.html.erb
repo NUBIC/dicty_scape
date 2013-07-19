@@ -1,0 +1,35 @@
+<h1>Listing relationships</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Go</th>
+      <th>Parent</th>
+      <th>Lft</th>
+      <th>Rgt</th>
+      <th>Depth</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @relationships.each do |relationship| %>
+      <tr>
+        <td><%= relationship.go_id %></td>
+        <td><%= relationship.parent_id %></td>
+        <td><%= relationship.lft %></td>
+        <td><%= relationship.rgt %></td>
+        <td><%= relationship.depth %></td>
+        <td><%= link_to 'Show', relationship %></td>
+        <td><%= link_to 'Edit', edit_relationship_path(relationship) %></td>
+        <td><%= link_to 'Destroy', relationship, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Relationship', new_relationship_path %>

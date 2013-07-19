@@ -7,7 +7,7 @@ class GenesController < ApplicationController
     @genes = Gene.all
     respond_to do |format|
         format.html  { render :index } # index.html.erb
-        format.json  { render :json => @genes.pluck("db_object_symbol").to_json}
+        format.json  { render :json => @genes.pluck("db_object_symbol").concat(@genes.pluck("db_object_id")).uniq.to_json}
     end
 
   end
@@ -97,6 +97,8 @@ class GenesController < ApplicationController
                     "selectable" => false
                 }
             end
+            allEdges = allEdges.uniq
+            allNodes = allNodes.uniq
             allNodes.concat(nodes_gene)
             allNodes.concat(nodes_GO_annotations)
             all << allNodes

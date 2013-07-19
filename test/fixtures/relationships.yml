@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  go_id: MyString
+  parent_id: MyString
+  lft: MyString
+  rgt: MyString
+  depth: 1
+
+two:
+  go_id: MyString
+  parent_id: MyString
+  lft: MyString
+  rgt: MyString
+  depth: 1

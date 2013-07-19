@@ -94,6 +94,8 @@ class AnnotationsController < ApplicationController
                     "selectable" => false
                 }
             end
+            allEdges = allEdges.uniq
+            allNodes = allNodes.uniq
             allNodes.concat(nodes_GO_annotations)
             allNodes.concat(nodes_gene)
             all << allNodes

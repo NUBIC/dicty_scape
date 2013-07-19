@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20130627171108) do
+ActiveRecord::Schema.define(version: 20130719143426) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,6 +36,14 @@ ActiveRecord::Schema.define(version: 20130627171108) do
     t.string "db_object_symbol"
     t.string "db_object_name"
     t.string "db_object_synonym"
+  end
+
+  create_table "relationships", force: true do |t|
+    t.string   "go_id"
+    t.string   "parent_id"
+    t.string   "lft"
+    t.string   "rgt"
+    t.integer  "depth"
   end
 
 end

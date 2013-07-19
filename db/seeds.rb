@@ -92,7 +92,7 @@ for i in 1...data.length do
     end
     objects << temp;
 end
-annotation_objects = []
+annotation_objects = [];
 data = [];
 File.open("data1.txt","r") do |f|
     f.read.split(/\r/).each do |tsv|
@@ -106,8 +106,25 @@ for i in 1...data.length do
     end
     annotation_objects << temp;
 end
+relationships = [];
+go_id = "";
+File.open("data2.txt","r") do |f|
+    f.read.split(/\n/).each do |line|
+        if line == "[Typedef]"
+            break;
+        elsif line[0..2] == "id:"
+            go_id = line[4..(line.length-1)];
+        elsif go_id!=""&&line[0..4]=="is_a:"
+            relationships <<
+            {
+                "go_id" => go_id,
+                "parent_id" => line[6..15]
+            }
+        end
+    end
+end
 genes = [];
-annotations = [];
+annotations_temp = [];
 gene_annotations = [];
 objects.each do |i|
     genes <<
@@ -117,6 +134,7 @@ objects.each do |i|
         "db_object_name" => i["db_object_name"],
         "db_object_synonym" => i["db_object_synonym"],
     };
+    annotations_temp << i["go_id"];
     if i["qualifier"]!="NOT"
         gene_annotations <<
         {
@@ -130,16 +148,22 @@ objects.each do |i|
         };
     end
 end
+puts "part 0 done"
+annotations_temp = annotations_temp.uniq;
+annotations = [];
 annotation_objects.each do |i|
-    annotations <<
-    {
-        "go_id" => i["go_id"],
-        "annotation_name" => i["annotation_name"]
-    }
+    if (annotations_temp.include?i["go_id"])
+        annotations <<
+        {
+            "go_id" => i["go_id"],
+            "annotation_name" => i["annotation_name"]
+        }
+    end
 end
+puts "part 1 done";
 genes = genes.uniq;
 annotations = annotations.uniq;
-puts "part 1 done";
+relationships = relationships.uniq;
 genes.each do |i|
     Gene.create(
         db_object_id: i["db_object_id"],
@@ -168,3 +192,10 @@ gene_annotations.each do |i|
     );
 end
 puts "part 4 done";
+relationships.each do |i|
+    Relationship.create(
+        go_id: i["go_id"],
+        parent_id: i["parent_id"]
+    );
+end
+puts "part 5 done";

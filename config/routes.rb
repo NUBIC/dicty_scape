@@ -1,4 +1,6 @@
 LocalDatabase::Application.routes.draw do
+  resources :relationships
+
   resources :gene_annotations
 
   resources :annotations do
