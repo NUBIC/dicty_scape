@@ -2,14 +2,8 @@
 
 one:
   go_id: MyString
-  parent_id: MyString
-  lft: MyString
-  rgt: MyString
-  depth: 1
+  parent_go_id: MyString
 
 two:
   go_id: MyString
-  parent_id: MyString
-  lft: MyString
-  rgt: MyString
-  depth: 1
+  parent_go_id: MyString

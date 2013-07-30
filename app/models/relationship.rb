@@ -1,3 +1,3 @@
 class Relationship < ActiveRecord::Base
-    acts_as_nested_set
+    has_one :annotation, :primary_key=>'parent_go_id', :foreign_key=>'go_id'
 end

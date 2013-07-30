@@ -6,6 +6,8 @@ LocalDatabase::Application.routes.draw do
   resources :annotations do
       member do
           get 'get_info'
+          get 'get_relationship'
+          get 'get_parent'
       end
   end
 
@@ -13,6 +15,8 @@ LocalDatabase::Application.routes.draw do
   resources :genes do
       member do
           get 'get_info'
+          get 'get_relationship'
+          get 'get_parent'
       end
   end
   # The priority is based upon order of creation: first created -> highest priority.

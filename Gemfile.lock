@@ -27,8 +27,6 @@ GEM
       tzinfo (~> 0.3.37)
     arel (4.0.0)
     atomic (1.1.10)
-    awesome_nested_set (2.1.6)
-      activerecord (>= 3.0.0)
     builder (3.1.4)
     coffee-rails (4.0.0)
       coffee-script (>= 2.2.0)
@@ -111,7 +109,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  awesome_nested_set
   coffee-rails (~> 4.0.0)
   jbuilder (~> 1.2)
   jquery-rails

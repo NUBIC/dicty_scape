@@ -4,10 +4,7 @@
   <thead>
     <tr>
       <th>Go</th>
-      <th>Parent</th>
-      <th>Lft</th>
-      <th>Rgt</th>
-      <th>Depth</th>
+      <th>Parent go</th>
       <th></th>
       <th></th>
       <th></th>
@@ -18,10 +15,7 @@
     <% @relationships.each do |relationship| %>
       <tr>
         <td><%= relationship.go_id %></td>
-        <td><%= relationship.parent_id %></td>
-        <td><%= relationship.lft %></td>
-        <td><%= relationship.rgt %></td>
-        <td><%= relationship.depth %></td>
+        <td><%= relationship.parent_go_id %></td>
         <td><%= link_to 'Show', relationship %></td>
         <td><%= link_to 'Edit', edit_relationship_path(relationship) %></td>
         <td><%= link_to 'Destroy', relationship, method: :delete, data: { confirm: 'Are you sure?' } %></td>

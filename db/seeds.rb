@@ -9,7 +9,6 @@
 Annotation.delete_all;
 Gene.delete_all;
 GeneAnnotation.delete_all;
-
 def getEvidenceCodeNum(string)
 	result = nil;
     case string
@@ -62,7 +61,6 @@ def getEvidenceCodeNum(string)
     end
     return result;
 end
-
 def getColorCode(string)
 	result = nil;
     case string
@@ -77,7 +75,6 @@ def getColorCode(string)
     end
     return result;
 end
-
 data = [];
 File.open("data.txt","r") do |f|
     f.read.split(/\r/).each do |tsv|
@@ -93,18 +90,19 @@ for i in 1...data.length do
     objects << temp;
 end
 annotation_objects = [];
-data = [];
-File.open("data1.txt","r") do |f|
-    f.read.split(/\r/).each do |tsv|
-        data << tsv.split(/\t/);
+File.open("data2.txt","r") do |f|
+    f.read.split(/\n/).each do |line|
+        if line == "[Typedef]"
+            break;
+        elsif line == "[Term]"
+            temp = Hash.new;
+        elsif line[0..2] == "id:"
+            temp.merge!(Hash["go_id" => line[4..(line.length-1)]]);
+        elsif line[0..4]=="name:"
+            temp.merge!(Hash["annotation_name" => line[6..(line.length-1)]]);
+            annotation_objects << temp;
+        end
     end
-end
-for i in 1...data.length do
-    temp = Hash.new;
-    for j in 0...data[0].length do
-        temp.merge!(Hash[data[0][j] => data[i][j]]);
-    end
-    annotation_objects << temp;
 end
 relationships = [];
 go_id = "";
@@ -118,7 +116,7 @@ File.open("data2.txt","r") do |f|
             relationships <<
             {
                 "go_id" => go_id,
-                "parent_id" => line[6..15]
+                "parent_go_id" => line[6..15]
             }
         end
     end
@@ -148,6 +146,10 @@ objects.each do |i|
         };
     end
 end
+relationships.each do |i|
+    annotations_temp << i["go_id"];
+    annotations_temp << i["parent_go_id"];
+end
 puts "part 0 done"
 annotations_temp = annotations_temp.uniq;
 annotations = [];
@@ -164,8 +166,9 @@ puts "part 1 done";
 genes = genes.uniq;
 annotations = annotations.uniq;
 relationships = relationships.uniq;
+puts genes.length
 genes.each do |i|
-    Gene.create(
+    Gene.create!(
         db_object_id: i["db_object_id"],
         db_object_symbol: i["db_object_symbol"],
         db_object_name: i["db_object_name"],
@@ -173,15 +176,17 @@ genes.each do |i|
     );
 end
 puts "part 2 done";
+puts annotations.length
 annotations.each do |i|
-    Annotation.create(
+    Annotation.create!(
         go_id: i["go_id"],
         annotation_name: i["annotation_name"]
     );
 end
 puts "part 3 done";
+puts gene_annotations.length
 gene_annotations.each do |i|
-    GeneAnnotation.create(
+    GeneAnnotation.create!(
         db_object_symbol: i["db_object_symbol"],
         go_id: i["go_id"],
         evidence_code: i["evidence_code"],
@@ -192,10 +197,11 @@ gene_annotations.each do |i|
     );
 end
 puts "part 4 done";
+puts relationships.length
 relationships.each do |i|
-    Relationship.create(
+    Relationship.create!(
         go_id: i["go_id"],
-        parent_id: i["parent_id"]
+        parent_go_id: i["parent_go_id"]
     );
 end
 puts "part 5 done";

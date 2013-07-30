@@ -44,4 +44,3 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'awesome_nested_set'
