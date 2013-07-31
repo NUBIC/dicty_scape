@@ -1,0 +1,28 @@
+<h1>Listing genes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Db object</th>
+      <th>Db object symbol</th>
+      <th>Db object name</th>
+      <th>Db object synonym</th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @genes.each do |gene| %>
+      <tr>
+        <td><%= gene.db_object_id %></td>
+        <td><%= gene.db_object_symbol %></td>
+        <td><%= gene.db_object_name %></td>
+        <td><%= gene.db_object_synonym %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>

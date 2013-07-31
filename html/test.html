@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>	
+<body>
+	<link href="css/font-awesome.min.css" rel="stylesheet" />
+	<link href="css/style.css" rel="stylesheet" />
+	<link href="css/jquery.qtip.min.css" rel="stylesheet" />
+	<link href="css/jquery.cytoscape-panzoom.css" rel="stylesheet" />
+	<link rel="stylesheet" href="css/themes/base/jquery.ui.all.css">
+	<script type="text/javascript" src="js/jquery-1.10.1.min.js"></script>
+	<script type="text/javascript" src="js/cytoscape.min.js"></script>
+	<script type="text/javascript" src="js/arbor.js"></script>
+	<script type="text/javascript" src="js/jquery.cytoscape-panzoom.js"></script>
+	<script type="text/javascript" src="js/jquery.cytoscape-edgehandles.min.js"></script>
+	<script type="text/javascript" src="js/jquery.cxtmenu.min.js"></script>
+	<script type="text/javascript" src="js/jquery.qtip.min.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.core.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.widget.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.position.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.menu.js"></script>
+	<script type="text/javascript" src="js/jquery.ui.autocomplete.js"></script>
+	<script type="text/javascript" src="js/methods.js"></script>
+
+	<style>
+	.ui-autocomplete {
+		max-height: 500px;
+		overflow-y: auto;
+		overflow-x: hidden;
+	}
+	</style>
+
+	<script async type="text/javascript">
+	$(function() {
+		window.parentpresent = false;
+		window.relationshippresent = false;
+		$("#radio2").hide();
+		$("#label2").hide();
+		window.genes = null;
+		window.annotations = null;
+		$.ajax(
+        {
+        	async: false,
+            url: "http://0.0.0.0:3000/genes.json",
+            dataType: "json",
+            type: "get",
+            success: function(data) {
+                window.genes = data
+            }
+        }); 
+        $.ajax(
+        {
+        	async: false,
+            url: "http://0.0.0.0:3000/annotations.json",
+            dataType: "json",
+            type: "get",
+            success: function(data) {
+                window.annotations = data
+            }
+        }); 
+		$("#genes").autocomplete({
+			source: window.genes,
+			minLength: 2,
+			select: function(event,ui){
+				$.getValuesJSON("http://0.0.0.0:3000/genes/"+ui.item.label+"/get_"+$.getSite()+".json");
+			}
+		});
+		$('#demo').cytoscape({});
+	});
+	</script>
+
+	<div ALIGN=center>
+	<B>Description:</B> 
+	<br>This program presents either related genes and GO annotations or a parent-child relationship between GO annotations in a navigatable node-based graph
+	<br>Gene to GO Annotation Relationship: This type centers on one gene or GO annotation and presents all related genes and GO annotations for two levels
+	<br>Parent to Child Annotation Relationship: This type centers on one GO annotation and presents all children or parents and all related genes
+	<br><B>Navigation:</B>
+	<br>Gene to GO Annotation Relationship:
+	<br>1. Clicking on selected gene or annotation(the centered node) will open a new page linking to the gene or annotation's site
+	<br>2. Clicking on a related gene or annotation(node with depth of 1 or 2) will recenter on that gene or annotation
+	<br>Parent to Child Annotation Relationship:
+	<br>1. Clicking on selected annotation(the centered node) will switch from view of all parents to view of all children or vice versa of the selected anotation(view of children is default at beginning)
+	<br>2. Clicking on a child or parent(node with depth 1) will recenter on that child or parent and show all children or all parents depending on the selected view
+	<br>3. Clicking on a gene(node with depth 2) will recenter on that gene and change to Gene to GO Annotation Relationship
+	<br><B>(Note: If a grouping is has too many related genes or GO annotations, the program will show a condensed version)</B>
+	</div>
+
+	<div id="all">
+		<div id="demo"></div>
+		<div id="data" ALIGN=center vertical-allign="middle"></data>
+	</div>
+
+	<div ALIGN=center>
+		<label>Search for </label>
+		<input type="radio" id="radio7" name="radiothree" checked="checked" onclick = 'Javascript:$(function(){document.getElementById("radio1").checked=true;document.getElementById("radio2").checked=false;$("#radio4").show();$("#label4").show();$("#radio2").hide();$("#label2").hide();$("#genes").autocomplete({source: window.genes,minLength: 2,select: function(event,ui){$.getValuesJSON("http://0.0.0.0:3000/genes/"+ui.item.label+"/get_"+$.getSite()+".json");}});})'/><label for="radio7">Gene</label>
+		<input type="radio" id="radio8" name="radiothree" onclick = 'Javascript:$(function(){$("#radio4").hide();$("#label4").hide();$("#radio2").show();$("#label2").show();$("#genes").autocomplete({source: window.annotations,minLength: 4,select: function(event,ui){$.getValuesJSON("http://0.0.0.0:3000/annotations/"+ui.item.label+"/get_"+$.getSite()+".json");}});if(window.relationshippresent){document.getElementById("radio1").checked=false;document.getElementById("radio2").checked=true;}})'/><label for="radio8">GO Annotation</label> : 
+		<input id="genes" value = "Name or ID" onclick='Javascript:$(function() {$("input[id=genes]").val("")})'/>
+		<input type="button" id "button" value="Enter" onclick='Javascript:$(function() {$.getValuesJSON("http://0.0.0.0:3000/genes/"+$("#genes").val()+"/get_"+$.getSite()+".json");$.getValuesJSON("http://0.0.0.0:3000/annotations/"+$("#genes").val()+"/get_"+$.getSite()+".json");});'> 
+		<br>Type:
+		<input type="radio" id="radio1" name="radioone" checked="checked" onclick = 'Javascript:$(function(){$("#radio4").show();$("#label4").show();window.relationshippresent=false;$.getValuesJSON("http://0.0.0.0:3000/genes/"+$("#genes").val()+"/get_"+$.getSite()+".json");$.getValuesJSON("http://0.0.0.0:3000/annotations/"+$("#genes").val()+"/get_"+$.getSite()+".json");})'/><label for="radio1">Gene to GO Annotation Relationship</label>
+		<input type="radio" id="radio2" name="radioone" onclick = 'Javascript:$(function(){$("#radio4").hide();$("#label4").hide();window.relationshippresent=true;$.getValuesJSON("http://0.0.0.0:3000/genes/"+$("#genes").val()+"/get_"+$.getSite()+".json");$.getValuesJSON("http://0.0.0.0:3000/annotations/"+$("#genes").val()+"/get_"+$.getSite()+".json");})'/><label id= "label2" for="radio2">Parent to Child Annotation Relationship</label>
+		<br>Orientation:
+		<input type="radio" id="radio3" name="radiotwo" checked="checked" onclick='Javascript:$(function() {$.getValuesJSON("http://0.0.0.0:3000/genes/"+$("#genes").val()+"/get_"+$.getSite()+".json");$.getValuesJSON("http://0.0.0.0:3000/annotations/"+$("#genes").val()+"/get_"+$.getSite()+".json");});' /><label for="radio3">Radial</label>
+		<input type="radio" id="radio4" name="radiotwo" onclick='Javascript:$(function() {$.getValuesJSON("http://0.0.0.0:3000/genes/"+$("#genes").val()+"/get_"+$.getSite()+".json");$.getValuesJSON("http://0.0.0.0:3000/annotations/"+$("#genes").val()+"/get_"+$.getSite()+".json");});'/><label id="label4" for="radio4">Force-Directed</label>
+		<input type="radio" id="radio5" name="radiotwo" onclick='Javascript:$(function() {$.getValuesJSON("http://0.0.0.0:3000/genes/"+$("#genes").val()+"/get_"+$.getSite()+".json");$.getValuesJSON("http://0.0.0.0:3000/annotations/"+$("#genes").val()+"/get_"+$.getSite()+".json");});'/><label for="radio5">Tree</label>
+		<input type="radio" id="radio6" name="radiotwo" onclick='Javascript:$(function() {$.getValuesJSON("http://0.0.0.0:3000/genes/"+$("#genes").val()+"/get_"+$.getSite()+".json");$.getValuesJSON("http://0.0.0.0:3000/annotations/"+$("#genes").val()+"/get_"+$.getSite()+".json");});'/><label for="radio6">Random Network</label>
+	</div>
+</body>
+</html>

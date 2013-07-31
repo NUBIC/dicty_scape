@@ -1,0 +1,1 @@
+json.extract! @gene_annotation, :db_object_symbol, :go_id, :evidence_code, :aspect, :reference, :aspect_num, :color_code

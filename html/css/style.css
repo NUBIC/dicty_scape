@@ -1,0 +1,27 @@
+body {
+	line-height: 1.5;
+	overflow:visible;
+	font: 10pt Helvetica Neue, Helvetica, Arial, sans-serif
+}
+#all
+{
+	height: 482px;
+	width: 1164px;
+	margin-left: auto;
+	margin-right: auto;
+}
+#data 
+{
+	float:left;
+	height: 480px;
+	width: 200px;
+	border: 1px solid #ddd;
+}
+#demo {
+	height: 480px;
+	width: 960px;
+	border: 1px solid #ddd;
+	
+	font: 20pt Helvetica Neue, Helvetica, Arial, sans-serif;
+	float:left;
+}
