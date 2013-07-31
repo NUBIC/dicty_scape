@@ -313,7 +313,7 @@ $(function()
                     if(cy.nodes().length!=1&&cy.nodes().length!=2)
                         $.fitWindow(cy);
                     else if (cy.nodes().length==2)
-                        cy.fit(cy.nodes(),150);
+                        cy.fit(cy.nodes(),200);
                     else
                     {
                         cy.fit();
@@ -372,12 +372,14 @@ $(function()
                     }
                     else if (!window.parentpresent)
                     {
-                        $.getValuesJSON("http://0.0.0.0:3000/annotations/"+oEvent.cyTarget.data("id")+"/get_parent.json") 
+                        window.center = oEvent.cyTarget.data("id");
+                        $.getValuesJSON("http://0.0.0.0:3000/annotations/"+window.center+"/get_parent.json") 
                         window.parentpresent = true;
                     }
                     else
                     {
-                        $.getValuesJSON("http://0.0.0.0:3000/annotations/"+oEvent.cyTarget.data("id")+"/get_relationship.json") 
+                        window.center = oEvent.cyTarget.data("id");
+                        $.getValuesJSON("http://0.0.0.0:3000/annotations/"+window.center+"/get_relationship.json") 
                         window.parentpresent = false;
                     }
                 }
@@ -393,7 +395,7 @@ $(function()
                         $("#label4").show();
                         $("#radio2").hide();
                         $("#label2").hide();
-                        $("#genes").autocomplete({source: window.genes,minLength: 2,select: function(event,ui){$.getValuesJSON("http://0.0.0.0:3000/genes/"+ui.item.label+"/get_"+$.getSite()+".json");}});
+                        $("#genes").autocomplete({source: window.genes,minLength: 2,select: function(event,ui){window.center = ui.item.label;$.getValuesJSON("http://0.0.0.0:3000/genes/"+window.center+"/get_"+$.getSite()+".json");}});
                     }
                     else
                     {
@@ -403,9 +405,10 @@ $(function()
                         $("#label4").hide();
                         $("#radio2").show();
                         $("#label2").show();
-                        $("#genes").autocomplete({source: window.annotations,minLength: 4,select: function(event,ui){$.getValuesJSON("http://0.0.0.0:3000/annotations/"+ui.item.label+"/get_"+$.getSite()+".json");}});
+                        $("#genes").autocomplete({source: window.annotations,minLength: 4,select: function(event,ui){window.center = ui.item.label;$.getValuesJSON("http://0.0.0.0:3000/annotations/"+window.center+"/get_"+$.getSite()+".json");}});
                     }
-                    $.getValuesJSON("http://0.0.0.0:3000/"+oEvent.cyTarget.data("group")+"s/"+oEvent.cyTarget.data("id")+"/get_"+$.getSite()+".json") 
+                    window.center = oEvent.cyTarget.data("id");
+                    $.getValuesJSON("http://0.0.0.0:3000/"+oEvent.cyTarget.data("group")+"s/"+window.center+"/get_"+$.getSite()+".json") 
                     $("input[id=genes]").val(oEvent.cyTarget.data("id"));
                 }       
             });
